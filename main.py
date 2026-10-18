@@ -1,4 +1,13 @@
-tasks = []
+import json
+
+try:
+    with open("tasks.json", "r") as file:
+        tasks = json.load(file)
+except FileNotFoundError:
+    tasks = []
+def save_tasks():
+    with open("tasks.json", "w") as file:
+        json.dump(tasks, file, indent=4)
 def print_menu():
     print("=" * 5, "Task Manager", "=" * 5)
     print("1. Add Task")
@@ -16,6 +25,7 @@ while True:
     if choice == 1:
         task = (input("Enter your task : "))
         tasks.append({"name": task, "completed": False})
+        save_tasks()
         print("Task added successfully")
         print()
     elif choice == 2:
@@ -33,6 +43,7 @@ while True:
         for task in tasks:
             if task_name == task["name"]:
                 task["completed"] = True
+                save_tasks()
                 found = True
                 print(f"The {task['name']} task is marked as completed successfully")
                 break
@@ -44,6 +55,7 @@ while True:
         for task in tasks:
             if delete == task['name']:
                 tasks.remove(task)
+                save_tasks()
                 found = True
                 print("Task deleted successfully")
                 break
